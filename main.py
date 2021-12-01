@@ -13,6 +13,11 @@ def create_dir(path):
     Path(path).mkdir(parents=True, exist_ok=True)
 
 
+def get_file_ext(url):
+    ext = url.split(".")[-1]
+    return ext.split("?")[0]
+
+
 def download_img(url, path):
     try:
         filename = path + Path(url).name
