@@ -25,7 +25,7 @@ def download_img(url, path):
         exit()
 
 
-def get_img_space_x(url, path):
+def fetch_spacex_last_launch(url, path):
     try:
         response = get_response(url)
         for container_img in response.json():
@@ -47,10 +47,10 @@ if __name__ == "__main__":
         create_dir(save_path)
         try:
             get_response(url_space_x_latest)
-            get_img_space_x(url_space_x_latest, save_path)
+            fetch_spacex_last_launch(url_space_x_latest, save_path)
         except:
             url_space_x = "/".join(["/".join(url_space_x_latest.split("/")[0:-1]), json_filter])
-            get_img_space_x(url_space_x, save_path)
+            fetch_spacex_last_launch(url_space_x, save_path)
         print("Успешно закончили")
     except IOError:
         print("Ошибка в скачивании картинки")
