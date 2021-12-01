@@ -40,11 +40,17 @@ def get_img_space_x(url, path):
 
 
 if __name__ == "__main__":
-    url_space_x = "https://api.spacexdata.com/v3/launches/?pretty=true&filter=links(flickr_images)"
+    url_space_x_latest = "https://api.spacexdata.com/v3/launches/latest?pretty=true"
+    json_filter = "?pretty=true&filter=links(flickr_images)"
     save_path = "images/SpaceX/"
     try:
         create_dir(save_path)
-        get_img_space_x(url_space_x, save_path)
+        try:
+            get_response(url_space_x_latest)
+            get_img_space_x(url_space_x_latest, save_path)
+        except:
+            url_space_x = "/".join(["/".join(url_space_x_latest.split("/")[0:-1]), json_filter])
+            get_img_space_x(url_space_x, save_path)
         print("Успешно закончили")
     except IOError:
         print("Ошибка в скачивании картинки")
