@@ -25,6 +25,7 @@ def get_extension(url):
 
 def download_img(url, path_image):
     filename = path_image + os_path.basename(url)
+    filename = filename.split("?")[0]
     response = get_response(url)
     if not os_path.isdir(path_image):
         create_dir(path_image)
@@ -32,7 +33,7 @@ def download_img(url, path_image):
         try:
             with open(filename, 'wb') as file_img:
                 file_img.write(response.content)
-            print(f"картинку {os_path.basename(url)} cкачали успешно")
+            print(f"картинку {filename} cкачали успешно")
         except IOError as error:
             print(f"Ошибка: {error}")
 
@@ -46,7 +47,26 @@ def fetch_spacex_last_launch(response, path_image):
             exit()
 
 
+def fetch_nasa(response, path_image):
+    for container_img in response.json():
+        if container_img["url"]:
+            download_img(container_img["url"], path_image)
+
+
+def fetch_nasa_epic(response, path_image):
+    for container_img in response.json():
+        if container_img["image"]:
+            image = container_img["image"]
+        if container_img["date"]:
+            date = container_img["date"]
+            date = date[:10]
+            date = "/".join(date.rsplit("-"))
+        url = f"https://api.nasa.gov/EPIC/archive/natural/{date}/png/{image}.png?api_key={TOKEN_NASA}"
+        download_img(url, path_image)
+
+
 def initial_space_x(url, json_filter):
+    save_path = "images/SpaceX/"
     response = get_response(url)
     if response:
         fetch_spacex_last_launch(response, save_path)
@@ -58,24 +78,28 @@ def initial_space_x(url, json_filter):
 
 
 def initial_nasa(url):
+    save_path = "images/NASA/"
     response = get_response(url)
     if response:
         fetch_nasa(response, save_path)
 
 
-def fetch_nasa(response, path_image):
-    for container_img in response.json():
-        if container_img["url"]:
-            download_img(container_img["url"], path_image)
+def initial_nasa_epic(url):
+    save_path = "images/NASA_EPIC/"
+    response = get_response(url)
+    if response:
+        fetch_nasa_epic(response, save_path)
 
 
 if __name__ == "__main__":
     load_dotenv()
+    TOKEN_NASA = environ.get('TOKEN_NASA')
     space_x_query = "https://api.spacexdata.com/v3/launches/latest?pretty=true"
-    nasa_query = f"https://api.nasa.gov/planetary/apod?start_date=2021-11-15&end_date=2021-12-02&api_key={environ.get('TOKEN_NASA')}"
+    nasa_query = f"https://api.nasa.gov/planetary/apod?start_date=2021-11-15&end_date=2021-12-02&api_key={TOKEN_NASA}"
+    nasa_query_epic = f"https://api.nasa.gov/EPIC/api/natural/images?api_key={TOKEN_NASA}"
     json_filter = "?pretty=true&filter=links(flickr_images)"
-    save_path = "images/NASA/"
     # initial_space_x(space_x_query, json_filter)
     initial_nasa(nasa_query)
+    # initial_nasa_epic(nasa_query_epic)
 
     print("Закончили")
