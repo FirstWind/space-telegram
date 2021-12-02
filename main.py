@@ -1,7 +1,8 @@
 import requests
 from requests.exceptions import HTTPError
 from pathlib import Path
-from os import path as os_path
+from os import path as os_path, environ
+from dotenv import load_dotenv
 
 
 def get_response(url):
@@ -69,12 +70,12 @@ def fetch_nasa(response, path_image):
 
 
 if __name__ == "__main__":
+    load_dotenv()
     space_x_query = "https://api.spacexdata.com/v3/launches/latest?pretty=true"
-    nasa_query = "https://api.nasa.gov/planetary/apod?start_date=2021-11-15&end_date=2021-12-02&api_key=NkcWH3O7Q7oL5bNRKGN21Q5CXJfH7yDcEHR7mWXw"
+    nasa_query = f"https://api.nasa.gov/planetary/apod?start_date=2021-11-15&end_date=2021-12-02&api_key={environ.get('TOKEN_NASA')}"
     json_filter = "?pretty=true&filter=links(flickr_images)"
     save_path = "images/NASA/"
     # initial_space_x(space_x_query, json_filter)
     initial_nasa(nasa_query)
 
     print("Закончили")
-
