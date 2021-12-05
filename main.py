@@ -3,6 +3,20 @@ from requests.exceptions import HTTPError
 from pathlib import Path
 from os import path as os_path, environ
 from dotenv import load_dotenv
+import telegram
+# from telegram import Update
+# from telegram.ext import Updater, CommandHandler, CallbackContext
+
+
+# def hello(update: Update, context: CallbackContext) -> None:
+#     update.message.reply_text(f'Hello {update.effective_user.first_name}')
+
+
+# def run_bot(token):
+#     updater = Updater(token)
+#     updater.dispatcher.add_handler(CommandHandler('hello', hello))
+#     updater.start_polling()
+#     updater.idle()
 
 
 def get_response(url):
@@ -94,12 +108,16 @@ def initial_nasa_epic(url):
 if __name__ == "__main__":
     load_dotenv()
     TOKEN_NASA = environ.get('TOKEN_NASA')
-    space_x_query = "https://api.spacexdata.com/v3/launches/latest?pretty=true"
-    nasa_query = f"https://api.nasa.gov/planetary/apod?start_date=2021-11-15&end_date=2021-12-02&api_key={TOKEN_NASA}"
-    nasa_query_epic = f"https://api.nasa.gov/EPIC/api/natural/images?api_key={TOKEN_NASA}"
-    json_filter = "?pretty=true&filter=links(flickr_images)"
+    # space_x_query = "https://api.spacexdata.com/v3/launches/latest?pretty=true"
+    # nasa_query = f"https://api.nasa.gov/planetary/apod?start_date=2021-11-15&end_date=2021-12-02&api_key={TOKEN_NASA}"
+    # nasa_query_epic = f"https://api.nasa.gov/EPIC/api/natural/images?api_key={TOKEN_NASA}"
+    # json_filter = "?pretty=true&filter=links(flickr_images)"
     # initial_space_x(space_x_query, json_filter)
-    initial_nasa(nasa_query)
+    # initial_nasa(nasa_query)
     # initial_nasa_epic(nasa_query_epic)
+    TOKEN_TELEGRAM = environ.get('TOKEN_TELEGRAM')
+    bot = telegram.Bot(token=TOKEN_TELEGRAM)
+    print(bot.get_me())
+    # run_bot(TOKEN_TELEGRAM)
 
     print("Закончили")
