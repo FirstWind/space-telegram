@@ -1,22 +1,20 @@
 import requests
 from requests.exceptions import HTTPError
 from pathlib import Path
-from os import path as os_path, environ
+from os import path as os_path, environ, walk
 from dotenv import load_dotenv
-import telegram
-# from telegram import Update
-# from telegram.ext import Updater, CommandHandler, CallbackContext
+
+from telegram.ext import Updater, CommandHandler
+from random import choice
 
 
-# def hello(update: Update, context: CallbackContext) -> None:
-#     update.message.reply_text(f'Hello {update.effective_user.first_name}')
-
-
-# def run_bot(token):
-#     updater = Updater(token)
-#     updater.dispatcher.add_handler(CommandHandler('hello', hello))
-#     updater.start_polling()
-#     updater.idle()
+def get_local_pictures(path_img):
+    local_pictures = []
+    for files in walk(path_img):
+        for file in files[2]:
+            if file:
+                local_pictures.append(os_path.join(path_img, file))
+    return local_pictures
 
 
 def get_response(url):
@@ -105,6 +103,23 @@ def initial_nasa_epic(url):
         fetch_nasa_epic(response, save_path)
 
 
+def start(update, context):
+    picture = open(choice(get_local_pictures("images/NASA_EPIC/")), "rb")
+    context.bot.send_photo(
+        chat_id=CHAT_ID,
+        photo=picture
+        )
+
+
+def main(token) -> None:
+    updater = Updater(token)
+    dispatcher = updater.dispatcher
+    dispatcher.add_handler(CommandHandler("start", start))
+
+    updater.start_polling()
+    updater.idle()
+
+
 if __name__ == "__main__":
     load_dotenv()
     TOKEN_NASA = environ.get('TOKEN_NASA')
@@ -115,9 +130,12 @@ if __name__ == "__main__":
     # initial_space_x(space_x_query, json_filter)
     # initial_nasa(nasa_query)
     # initial_nasa_epic(nasa_query_epic)
+
     TOKEN_TELEGRAM = environ.get('TOKEN_TELEGRAM')
-    bot = telegram.Bot(token=TOKEN_TELEGRAM)
-    print(bot.get_me())
-    # run_bot(TOKEN_TELEGRAM)
+    CHAT_ID = environ.get('CHANNEL_TELEGRAM_ID')
+
+    main(TOKEN_TELEGRAM)
+    # print(choice(get_local_pictures("images/NASA_EPIC/")))
+
 
     print("Закончили")
