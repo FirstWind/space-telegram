@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 from os import environ
+from datetime import date, timedelta
 
 from additional import download_img
 from additional import get_response
@@ -19,7 +20,10 @@ def initial_nasa(url, path_images):
 
 if __name__ == "__main__":
     load_dotenv()
+    DELTA_DATE = int(environ.get('DELTA_DATE'))
     TOKEN_NASA = environ.get('TOKEN_NASA')
     path_images = environ.get('PATH_IMAGES')
-    nasa_query = f"https://api.nasa.gov/planetary/apod?start_date=2021-11-15&end_date=2021-12-02&api_key={TOKEN_NASA}"
+    now = date.today() - timedelta(days=1)
+    delta_date = now - timedelta(days=DELTA_DATE)
+    nasa_query = f"https://api.nasa.gov/planetary/apod?start_date={delta_date}&end_date={now}&api_key={TOKEN_NASA}"
     initial_nasa(nasa_query, path_images)

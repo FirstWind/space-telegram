@@ -48,6 +48,7 @@
 TOKEN_NASA=секретный ключ для API запросов к сервису API NASA
 TOKEN_TELEGRAM=секретный ключ для API запросов в Telegram 
 CHANNEL_TELEGRAM_ID=идентификатор вашего канала в Telegram. Например: @PhotosOfSpace
+DELTA_DATE=30 количество дней от текущей даты для скачивания фотографий в скрипте photo_nasa.py  
 PATH_IMAGES=images/ Путь к локальному массиву фотографий космоса
 TIME_SLEEP=86400 Время в (сек) для отсылки фотографии
 ```
