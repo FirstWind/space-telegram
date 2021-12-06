@@ -1,7 +1,3 @@
-import photo_bot
-import photo_nasa
-import photo_nasa_epic
-import photo_space_x
 
 
 if __name__ == "__main__":

@@ -28,6 +28,6 @@ if __name__ == "__main__":
     load_dotenv()
     TOKEN_TELEGRAM = environ.get('TOKEN_TELEGRAM')
     CHAT_ID = environ.get('CHANNEL_TELEGRAM_ID')
-    TIME_SLEEP = environ.get('TIME_SLEEP')
+    TIME_SLEEP = int(environ.get('TIME_SLEEP'))
 
     main(TOKEN_TELEGRAM, CHAT_ID, TIME_SLEEP)
