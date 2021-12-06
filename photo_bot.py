@@ -31,4 +31,3 @@ if __name__ == "__main__":
     TIME_SLEEP = environ.get('TIME_SLEEP')
 
     main(TOKEN_TELEGRAM, CHAT_ID, TIME_SLEEP)
-    send_photo()
