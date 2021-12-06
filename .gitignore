@@ -1,4 +1,3 @@
 /venv/
-/images/N*/*
-/images/SpaceX/*
+/images/*
 /.env
