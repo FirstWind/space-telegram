@@ -13,7 +13,7 @@ def get_local_pictures(path_img):
     for files in walk(path_img):
         for file in files[2]:
             if file:
-                local_pictures.append(os_path.join(path_img, file))
+                local_pictures.append(os_path.join(files[0], file))
     return local_pictures
 
 
@@ -103,39 +103,51 @@ def initial_nasa_epic(url):
         fetch_nasa_epic(response, save_path)
 
 
-def start(update, context):
-    picture = open(choice(get_local_pictures("images/NASA_EPIC/")), "rb")
-    context.bot.send_photo(
+def get_random_photo():
+    return open(choice(get_local_pictures("images/")), "rb")
+
+
+def send_photo(updater, CHAT_ID):
+    updater.bot.send_photo(
         chat_id=CHAT_ID,
-        photo=picture
+        photo=get_random_photo()
         )
+    print("Фотография отправлена")
 
 
-def main(token) -> None:
+def main(token, chat_id) -> None:
     updater = Updater(token)
-    dispatcher = updater.dispatcher
-    dispatcher.add_handler(CommandHandler("start", start))
-
     updater.start_polling()
+    print("Бот запущен")
+    send_photo(updater, chat_id)
     updater.idle()
 
 
 if __name__ == "__main__":
+    select_image_type = int(
+        input(
+            "Какие картинки будем загружать? Выберите цифру:\n NASA(1)\n NASA EPIC(2)\n SpaceX(3)\n Или не качаем(0)\n >> "
+            )
+        )
     load_dotenv()
-    TOKEN_NASA = environ.get('TOKEN_NASA')
-    # space_x_query = "https://api.spacexdata.com/v3/launches/latest?pretty=true"
-    # nasa_query = f"https://api.nasa.gov/planetary/apod?start_date=2021-11-15&end_date=2021-12-02&api_key={TOKEN_NASA}"
-    # nasa_query_epic = f"https://api.nasa.gov/EPIC/api/natural/images?api_key={TOKEN_NASA}"
-    # json_filter = "?pretty=true&filter=links(flickr_images)"
-    # initial_space_x(space_x_query, json_filter)
-    # initial_nasa(nasa_query)
-    # initial_nasa_epic(nasa_query_epic)
+    if select_image_type == 1:
+        TOKEN_NASA = environ.get('TOKEN_NASA')
+        nasa_query = f"https://api.nasa.gov/planetary/apod?start_date=2021-11-15&end_date=2021-12-02&api_key={TOKEN_NASA}"
+        initial_nasa(nasa_query)
+    elif select_image_type == 2:
+        TOKEN_NASA = environ.get('TOKEN_NASA')
+        nasa_query_epic = f"https://api.nasa.gov/EPIC/api/natural/images?api_key={TOKEN_NASA}"
+        initial_nasa_epic(nasa_query_epic)
+    elif select_image_type == 3:
+        space_x_query = "https://api.spacexdata.com/v3/launches/latest?pretty=true"
+        json_filter = "?pretty=true&filter=links(flickr_images)"
+        initial_space_x(space_x_query, json_filter)
 
     TOKEN_TELEGRAM = environ.get('TOKEN_TELEGRAM')
     CHAT_ID = environ.get('CHANNEL_TELEGRAM_ID')
 
-    main(TOKEN_TELEGRAM)
+    main(TOKEN_TELEGRAM, CHAT_ID)
+    send_photo()
     # print(choice(get_local_pictures("images/NASA_EPIC/")))
-
 
     print("Закончили")
