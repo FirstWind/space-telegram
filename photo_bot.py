@@ -1,7 +1,9 @@
-import time
+from time import sleep
 
 from dotenv import load_dotenv
 from os import environ
+
+from telegram.error import NetworkError
 from telegram.ext import Updater
 
 from additional import get_random_photo
@@ -21,7 +23,7 @@ def main(token, chat_id, TIME_SLEEP) -> None:
     print("Бот запущен")
     while True:
         send_photo(updater, chat_id)
-        time.sleep(TIME_SLEEP)
+        sleep(TIME_SLEEP)
 
 
 if __name__ == "__main__":
