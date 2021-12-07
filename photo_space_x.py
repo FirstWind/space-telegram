@@ -1,8 +1,8 @@
-from dotenv import load_dotenv
-from os import environ, path as os_path
+from os import environ
+from os import path as os_path
 
-from additional import download_img
-from additional import get_response
+from additional import download_img, get_response
+from dotenv import load_dotenv
 
 
 def fetch_spacex_last_launch(response, path_images):

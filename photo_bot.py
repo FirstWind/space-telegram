@@ -1,12 +1,9 @@
+from os import environ
 from time import sleep
 
-from dotenv import load_dotenv
-from os import environ
-
-from telegram.error import NetworkError
-from telegram.ext import Updater
-
 from additional import get_random_photo
+from dotenv import load_dotenv
+from telegram.ext import Updater
 
 
 def send_photo(updater, CHAT_ID):

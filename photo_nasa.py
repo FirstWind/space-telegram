@@ -1,9 +1,8 @@
-from dotenv import load_dotenv
-from os import environ
 from datetime import date, timedelta
+from os import environ
 
-from additional import download_img
-from additional import get_response
+from additional import download_img, get_response
+from dotenv import load_dotenv
 
 
 def fetch_nasa(response, path_images):

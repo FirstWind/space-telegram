@@ -1,8 +1,10 @@
+from os import path as os_path
+from os import walk
+from pathlib import Path
+from random import choice
+
 import requests
 from requests.exceptions import HTTPError
-from pathlib import Path
-from os import path as os_path, walk
-from random import choice
 
 
 def get_local_pictures(path_img):
